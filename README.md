@@ -17,3 +17,27 @@ Oort는 오르트 구름(Oort Cloud)에서 가져온 이름이다.
 병목, 비동기 처리, 멱등성, 장애 격리, 관측 같은 백엔드 주제를 직접 구현하고 실험하며 설명 가능한 경험으로 남기는 것을 목표로 한다.
 
 프로젝트는 처음부터 완성된 아키텍처를 정하지 않는다. 실제 회사에서 일하듯 문제를 정의하고, 작은 단위로 설계하고, 구현하고, 관찰한 뒤 다음 결정을 이어간다.
+
+## Local Development
+
+로컬 개발은 Windows PowerShell 기준으로 진행한다.
+
+기본 검증:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\check.ps1
+```
+
+로컬 의존성 실행:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\up.ps1
+```
+
+로컬 의존성 종료:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\down.ps1
+```
+
+현재 `notification` 애플리케이션은 IDE 또는 Gradle로 로컬 JVM에서 실행한다. Docker Compose는 PostgreSQL과 `mock-server`를 실행한다.
