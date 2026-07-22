@@ -185,21 +185,9 @@ PR 템플릿은 다음 항목을 기본으로 한다.
 
 템플릿은 작업을 돕기 위한 최소 구조로 유지한다. 작성 부담이 커질 정도로 세분화하지 않는다.
 
-## Review Rule
-
-GitHub PR 리뷰 보조 도구로 CodeRabbit을 활용할 수 있다.
-
-CodeRabbit은 코드 변경의 위험, 누락된 테스트, 설계상 어색한 부분을 확인하는 용도로 사용한다.
-
-poem, 과한 요약, 장식성 메시지처럼 리뷰 판단에 직접 도움이 되지 않는 출력은 설정에서 제거한다.
-
-CodeRabbit 설정 파일은 GitHub 연동 시점에 공식 설정 문서를 확인한 뒤 추가한다.
-
 ## Branch Protection Rule
 
 혼자 진행하는 프로젝트이므로 브랜치 보호는 개발 흐름을 막지 않는 수준으로 둔다.
-
-CodeRabbit approval은 merge required 조건으로 두지 않는다. CodeRabbit은 리뷰 보조 도구이며 최종 판단은 사용자가 한다.
 
 CI가 도입되면 build, test, ktlintCheck 같은 기계적 검증만 required check 후보로 둔다.
 
