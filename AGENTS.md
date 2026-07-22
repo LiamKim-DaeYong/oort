@@ -123,6 +123,8 @@ Jira 같은 별도 이슈 트래커는 사용하지 않고 GitHub Issues로 작�
 
 Issue는 작업 하나 또는 실험 하나 단위로 만든다.
 
+GitHub CLI로 issue나 PR 본문을 작성할 때 긴 Markdown을 `--body` 인자로 직접 넘기지 않는다. PowerShell에서 백틱, 따옴표, 줄바꿈이 깨질 수 있으므로 임시 파일 또는 템플릿 파일을 만든 뒤 `--body-file`을 사용한다. 임시 파일은 사용 후 삭제한다.
+
 좋은 예:
 
 - `Gradle 멀티프로젝트 스캐폴딩`
@@ -157,6 +159,8 @@ Issue 본문은 최소한 다음 구조를 사용한다.
 - `area:build`
 - `area:docs`
 - `status:blocked`
+
+혼자 진행하는 프로젝트이므로 issue assignee는 기본적으로 `LiamKim-DaeYong`으로 둔다. assignee 적용이 실패하면 비워두고 진행한다.
 
 Milestone과 Project board는 이슈가 많아지거나 흐름 관리가 필요해질 때 도입한다.
 
