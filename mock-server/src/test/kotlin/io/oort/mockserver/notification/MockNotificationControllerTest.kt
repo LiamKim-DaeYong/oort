@@ -22,7 +22,7 @@ class MockNotificationControllerTest :
                 .build()
 
         describe("POST /mock/notifications") {
-            it("accepts notification send request") {
+            it("accepts notification request") {
                 mockMvc
                     .post("/mock/notifications") {
                         contentType = MediaType.APPLICATION_JSON

@@ -13,11 +13,11 @@ import java.util.UUID
 @RequestMapping("/mock/notifications")
 class MockNotificationController {
     @PostMapping
-    fun sendNotification(
-        @Valid @RequestBody request: MockNotificationSendRequest,
-    ): ResponseEntity<MockNotificationSendResponse> {
+    fun acceptNotification(
+        @Valid @RequestBody request: MockNotificationRequest,
+    ): ResponseEntity<MockNotificationAcceptanceResponse> {
         val response =
-            MockNotificationSendResponse(
+            MockNotificationAcceptanceResponse(
                 vendorMessageId = UUID.randomUUID().toString(),
                 status = "ACCEPTED",
             )
@@ -26,7 +26,7 @@ class MockNotificationController {
     }
 }
 
-data class MockNotificationSendRequest(
+data class MockNotificationRequest(
     @field:NotBlank
     val channel: String,
     @field:NotBlank
@@ -37,7 +37,7 @@ data class MockNotificationSendRequest(
     val content: String,
 )
 
-data class MockNotificationSendResponse(
+data class MockNotificationAcceptanceResponse(
     val vendorMessageId: String,
     val status: String,
 )
