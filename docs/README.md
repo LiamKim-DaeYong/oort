@@ -3,6 +3,7 @@
 Oort의 설계 결정, 작업 기록, 학습 기록, 블로그 재료를 남기는 공간이다.
 
 - `decisions/`: 프로젝트의 중요한 설계 결정과 그 이유를 기록한다.
+- `design/`: 구현에 참고할 현재 설계 문서를 주제별로 정리한다.
 - `notes/`: 작업 기록, 실험 결과, 회고, 임시 합의를 날짜별로 기록한다.
 - `learning/`: 프로젝트를 진행하며 이해한 백엔드 개념과 면접 대비 내용을 주제별로 정리한다.
 - `blog/`: 블로그 글을 쓰기 위한 재료, 제목 후보, 글 구조, 이력서 문장 후보를 정리한다.
@@ -12,26 +13,27 @@ Oort의 설계 결정, 작업 기록, 학습 기록, 블로그 재료를 남기�
 문서 파일명은 찾기 쉽도록 최소 규칙만 둔다.
 
 - `decisions/`: `0001-kebab-case-title.md`
+- `design/`: `kebab-case-topic.md`
 - `notes/`: `YYYY-MM-DD-kebab-case-title.md`
 - `learning/`: `kebab-case-topic.md`
 - `blog/`: `kebab-case-topic.md`
 
 문서 내부 형식은 지금 고정하지 않는다. 필요해지면 프로젝트를 진행하며 조정한다.
 
-## Policies And Flows
+## Design Documents
 
-정책 문서와 flow 문서는 초기에는 `notes/`에 남긴다.
+정책 문서와 flow 문서는 `design/`에 남긴다.
 
 예:
 
-- `YYYY-MM-DD-notification-sync-flow.md`
-- `YYYY-MM-DD-notification-status-policy.md`
-- `YYYY-MM-DD-retry-policy.md`
-- `YYYY-MM-DD-idempotency-policy.md`
+- `notification-sync-flow.md`
+- `notification-status-policy.md`
+- `retry-policy.md`
+- `idempotency-policy.md`
 
-아직 정책과 flow가 안정되지 않았기 때문에 별도 폴더를 먼저 만들지 않는다. 문서가 많아지거나 내용이 안정되면 `policies/`, `flows/` 같은 폴더로 분리할 수 있다.
+설계 문서는 완성된 정답이 아니라 현재 구현을 안내하는 기준이다. 구현과 관찰 결과에 따라 설계가 바뀌면 문서를 함께 업데이트한다.
 
-구현 전에 큰 설계 문서를 먼저 만들기보다, 필요한 경우 가벼운 flow note를 작성하고 구현과 관찰 결과에 따라 업데이트한다.
+되돌리기 비용이 큰 아키텍처 결정은 `docs/decisions/`에 별도로 남긴다.
 
 ## Learning Notes
 
