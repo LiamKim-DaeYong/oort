@@ -39,16 +39,20 @@ Client
 
 Kafka, Redis, 별도 worker는 아직 구성 요소에 넣지 않는다.
 
-## Initial API Shape
+## API Shape To Decide
 
-초기 API는 두 개만 둔다.
+Walking Skeleton에는 발송 요청 API와 상태 조회 API가 필요하다.
+
+다만 endpoint URL은 클라이언트와 맺는 계약이므로 구현 전에 따로 결정한다. 이 문서에서는 필요한 API의 역할만 먼저 정리한다.
+
+필요한 API 역할은 두 개다.
 
 ```text
-POST /notifications
-GET /notifications/{id}
+POST {notification-request-url}
+GET {notification-status-url}
 ```
 
-`POST /notifications`는 알림 발송을 요청한다.
+발송 요청 API는 알림 발송을 요청한다.
 
 초기 요청은 다음 정보만 포함한다.
 
@@ -57,7 +61,7 @@ GET /notifications/{id}
 - title
 - content
 
-`GET /notifications/{id}`는 저장된 알림 상태를 조회한다.
+상태 조회 API는 저장된 알림 상태를 조회한다.
 
 초기 응답은 다음 정보만 포함한다.
 
@@ -71,6 +75,35 @@ GET /notifications/{id}
 - completedAt
 
 필드 이름과 타입은 구현하면서 조정할 수 있다. 이 문서에서는 어떤 정보가 필요한지만 정한다.
+
+## API URL Decision Criteria
+
+API URL은 다음 기준으로 결정한다.
+
+- 리소스 이름이 notification 서비스의 책임을 정확히 드러내는가?
+- 요청 접수와 실제 발송 결과 조회를 자연스럽게 표현하는가?
+- 나중에 대량 발송, 예약 발송, 템플릿이 들어와도 과하게 좁아지지 않는가?
+- 외부에 공개됐을 때 설명하기 쉬운가?
+- 버저닝을 URL에 둘지, 문서와 호환성 정책으로 관리할지 판단했는가?
+
+현재 후보는 다음과 같다.
+
+```text
+POST /notifications
+GET /notifications/{id}
+```
+
+```text
+POST /notification-requests
+GET /notification-requests/{id}
+```
+
+```text
+POST /api/v1/notifications
+GET /api/v1/notifications/{id}
+```
+
+Walking Skeleton 구현 전에 이 후보 중 하나를 선택하거나 다른 후보를 추가한다.
 
 ## Initial Status
 
@@ -135,6 +168,7 @@ mock-server는 실제 SMS, Email, Push 발송사를 구현하지 않는다.
 Walking Skeleton을 만들면서 다음 질문을 확인한다.
 
 - notification 서비스가 맡는 책임과 mock-server가 맡는 책임이 자연스럽게 분리되는가?
+- API URL이 서비스 책임과 장기 확장 방향을 자연스럽게 표현하는가?
 - 요청 저장과 외부 호출, 결과 저장의 순서가 설명 가능한가?
 - 실패 응답을 받았을 때 상태를 어디까지 남길 수 있는가?
 - 처음부터 동기 호출로 만들었을 때 어떤 한계가 생길 가능성이 있는가?
