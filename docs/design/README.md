@@ -7,6 +7,7 @@
 예:
 
 - `notification-service-overview.md`
+- `notification-walking-skeleton.md`
 - `notification-domain-model.md`
 - `notification-sync-flow.md`
 - `notification-status-policy.md`
