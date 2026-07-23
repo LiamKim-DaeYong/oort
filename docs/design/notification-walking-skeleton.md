@@ -193,7 +193,22 @@ mock-server는 실제 SMS, Email, Push 발송사를 구현하지 않는다.
 
 초기에는 notification 서비스가 외부 시스템을 호출한다는 사실을 확인할 수 있으면 충분하다.
 
-처음에는 다음 기능만 필요하다.
+mock-server의 HTTP path는 `/mock/{domain}` 규칙을 따른다. 이 규칙에서 `{domain}`은 Oort 내부 서비스가 아니라 Oort가 의존하는 외부 시스템 영역을 의미한다.
+
+예:
+
+- `/mock/notifications`
+- `/mock/payments`
+- `/mock/deliveries`
+- `/mock/identity`
+
+처음에는 다음 endpoint만 필요하다.
+
+```text
+POST /mock/notifications
+```
+
+처음에는 다음 동작만 필요하다.
 
 - 알림 발송 요청을 받는다.
 - 성공 응답을 반환한다.
