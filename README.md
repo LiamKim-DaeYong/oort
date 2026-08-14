@@ -41,3 +41,15 @@ powershell -ExecutionPolicy Bypass -File .\scripts\down.ps1
 ```
 
 현재 `notification` 애플리케이션은 IDE 또는 Gradle로 로컬 JVM에서 실행한다. Docker Compose는 PostgreSQL과 `mock-server`를 실행한다.
+
+notification 실행:
+
+```powershell
+.\gradlew.bat :notification:bootRun
+```
+
+Walking Skeleton smoke test:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\smoke.ps1
+```
