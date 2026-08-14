@@ -59,6 +59,8 @@ GET /api/v1/notifications/{notificationId}
 - title
 - content
 
+`POST /api/v1/notifications`는 `201 Created`와 생성된 notification 리소스를 반환한다. mock-server 호출에 실패해도 요청 리소스와 `FAILED` 상태는 저장되므로, HTTP 상태만으로 발송 결과를 표현하지 않는다. 호출자는 응답 본문 또는 상태 조회 API의 `status`를 확인한다.
+
 `GET /api/v1/notifications/{notificationId}`는 저장된 알림 상태를 조회한다.
 
 초기 응답은 다음 정보만 포함한다.

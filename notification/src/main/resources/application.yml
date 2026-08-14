@@ -1,3 +1,15 @@
 spring:
   application:
     name: notification
+  datasource:
+    url: jdbc:postgresql://localhost:5432/oort_notification
+    username: oort
+    password: oort
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+notification:
+  vendor:
+    base-url: http://localhost:8081
