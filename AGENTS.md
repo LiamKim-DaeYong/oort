@@ -88,10 +88,17 @@ Spring Boot, Kotlin, 테스트/품질 도구는 도입 시점의 최신 안정 �
 - `main`: 항상 동작 가능한 기준 브랜치
 - `feature/*`: 기능 또는 작업 단위 브랜치
 
+모든 변경 작업은 GitHub Issue를 먼저 만들고 시작한다. Issue 번호는 브랜치, 커밋, PR을 연결하는 작업 식별자다.
+
+- 브랜치는 `feature/{issue-number}-{short-kebab-case}` 형식을 사용한다.
+- 커밋 메시지는 Conventional Commits 형식 뒤에 `(#<issue-number>)`을 붙인다.
+- PR 본문에는 반드시 `Closes #<issue-number>`를 넣는다.
+- Issue는 PR을 만들기 전에 닫지 않는다. PR이 main에 merge되어 GitHub가 자동으로 닫게 한다.
+
 커밋 메시지는 Conventional Commits 형식을 가볍게 따른다.
 
 ```text
-type(scope): 한글 설명
+type(scope): 한글 설명 (#<issue-number>)
 ```
 
 `scope`는 선택이지만 가능하면 적는다.
@@ -99,11 +106,11 @@ type(scope): 한글 설명
 예:
 
 ```text
-docs: 프로젝트 킥오프 문서 정리
-chore(build): Gradle 멀티프로젝트 구성
-feat(notification): 알림 생성 API 추가
-test(notification): 알림 상태 전이 테스트 추가
-fix(mock-server): 실패 응답 처리 보정
+docs: 프로젝트 킥오프 문서 정리 (#1)
+chore(build): Gradle 멀티프로젝트 구성 (#3)
+feat(notification): 알림 생성 API 추가 (#13)
+test(notification): 알림 상태 전이 테스트 추가 (#13)
+fix(mock-server): 실패 응답 처리 보정 (#13)
 ```
 
 기본 type은 다음을 사용한다.
@@ -124,6 +131,8 @@ fix(mock-server): 실패 응답 처리 보정
 Jira 같은 별도 이슈 트래커는 사용하지 않고 GitHub Issues로 작업을 관리한다.
 
 Issue는 작업 하나 또는 실험 하나 단위로 만든다.
+
+코드, 설정, 문서, 실험 결과처럼 저장소에 남는 변경은 모두 Issue를 먼저 만든다. 아직 변경하지 않는 설계 논의나 조사만 수행할 때는 Issue를 바로 만들지 않아도 된다.
 
 GitHub CLI로 issue나 PR 본문을 작성할 때 긴 Markdown을 `--body` 인자로 직접 넘기지 않는다. PowerShell에서 백틱, 따옴표, 줄바꿈이 깨질 수 있으므로 임시 파일 또는 템플릿 파일을 만든 뒤 `--body-file`을 사용한다. 임시 파일은 사용 후 삭제한다.
 
@@ -178,6 +187,8 @@ PR 템플릿은 다음 항목을 기본으로 한다.
 ```md
 ## Summary
 
+Closes #
+
 ## Changes
 
 ## Verification
@@ -207,3 +218,5 @@ CI가 도입되면 build, test, ktlintCheck 같은 기계적 검증만 required 
 실행 가능한 실험 스크립트와 raw 결과는 `experiments/`에 남긴다.
 
 실험 해석과 회고는 `docs/notes/`에 남기고, 블로그 재료는 `docs/blog/`에 남긴다.
+
+Issue 생성과 브랜치 생성 같은 workflow 자동화는 같은 수동 흐름이 반복되고 입력·예외가 안정화된 뒤 별도 Issue로 도입한다. 현재는 검증 하네스(`check`, `up`, `down`, `smoke`)를 유지하고 GitHub workflow는 명시적인 단계로 수행한다.
