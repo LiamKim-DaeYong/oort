@@ -7,4 +7,4 @@ Set-Location $Root
 
 Invoke-Checked { docker info }
 Invoke-Checked { .\gradlew.bat :mock-server:bootJar }
-Invoke-Checked { docker compose up -d postgres mock-server }
+Invoke-Checked { docker compose up -d --build postgres mock-server }
