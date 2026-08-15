@@ -165,11 +165,13 @@ Issue 본문은 최소한 다음 구조를 사용한다.
 - `type:bug`
 - `type:experiment`
 - `type:docs`
-- `area:notification`
-- `area:mock-server`
-- `area:build`
-- `area:docs`
+- `service:notification`
+- `service:mock-server`
 - `status:blocked`
+
+모든 Issue에는 `type:*` label을 정확히 하나 붙인다. 특정 실행 서비스에 영향을 주는 작업에만 `service:*` label을 하나 추가한다. 실제로 진행이 막힌 경우에만 `status:blocked`를 추가한다.
+
+`area:*`, priority, 진행 중, 리뷰 대기 같은 label은 현재 사용하지 않는다. 새로운 서비스나 횡단 주제 label은 실제로 필터링·분류할 필요가 반복될 때 별도로 논의한다.
 
 혼자 진행하는 프로젝트이므로 issue assignee는 기본적으로 `LiamKim-DaeYong`으로 둔다. assignee 적용이 실패하면 비워두고 진행한다.
 
