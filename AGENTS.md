@@ -232,16 +232,16 @@ Closes #
 
 CI가 도입되면 build, test, ktlintCheck 같은 기계적 검증만 required check 후보로 둔다.
 
-## Harness Rule
+## Local Development Rule
 
-로컬 개발과 검증의 공통 진입점은 PowerShell 스크립트로 둔다.
+로컬 개발과 검증의 공통 진입점은 Gradle Wrapper와 Docker Compose로 둔다.
 
-초기 스크립트는 다음 이름을 기준으로 한다.
+- 빌드, 테스트, ktlint 검증은 Gradle Wrapper로 실행한다.
+- PostgreSQL과 mock-server 같은 로컬 의존성은 Docker Compose로 실행한다.
+- macOS/Linux에서는 `./gradlew`, Windows에서는 `.\gradlew.bat`를 사용한다.
+- 특정 운영체제 전용 셸 스크립트는 공통 진입점으로 추가하지 않는다.
 
-- `scripts/check.ps1`: ktlint, test, build 같은 기본 검증
-- `scripts/up.ps1`: 로컬 의존성 실행
-- `scripts/down.ps1`: 로컬 의존성 종료
-- `scripts/smoke.ps1`: Walking Skeleton 핵심 흐름 확인
+Walking Skeleton의 HTTP 스모크 검증은 재사용 가능한 교차 플랫폼 방식이 필요해질 때 별도 작업으로 설계한다.
 
 실행 가능한 실험 스크립트와 raw 결과는 `experiments/`에 남긴다.
 
