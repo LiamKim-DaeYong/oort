@@ -17,9 +17,10 @@ Oort의 Gradle 빌드가 내려받는 의존성 artifact의 무결성을 검증�
 
    ```powershell
    .\gradlew.bat --write-verification-metadata sha256 --write-locks ktlintCheck test build
+   .\gradlew.bat --write-verification-metadata sha256 help
    ```
 
-   macOS/Linux에서는 `./gradlew`를 사용한다.
+   두 번째 명령은 일반 build task가 해석하지 않는 Gradle plugin classpath checksum을 포함한다. macOS/Linux에서는 `./gradlew`를 사용한다.
 
 3. `verification-metadata.xml`의 새 checksum과 각 `gradle.lockfile`의 dependency diff를 PR에서 검토한다.
 4. 생성 결과와 함께 기본 검증을 실행한다.
