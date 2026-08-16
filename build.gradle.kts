@@ -18,4 +18,8 @@ sonar {
 subprojects {
     group = "io.oort"
     version = "0.0.1-SNAPSHOT"
+
+    dependencyLocking {
+        lockAllConfigurations()
+    }
 }
