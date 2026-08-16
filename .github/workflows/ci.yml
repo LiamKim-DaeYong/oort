@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Set up JDK
         uses: actions/setup-java@v5
@@ -24,3 +26,8 @@ jobs:
 
       - name: Run checks
         run: ./gradlew ktlintCheck test build
+
+      - name: Run SonarQube analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew sonar --info
