@@ -126,6 +126,22 @@ fix(mock-server): 실패 응답 처리 보정 (#13)
 
 커밋은 나중에 읽었을 때 의미 있는 단위로 나눈다. `작업`, `수정`, `update`, `fix` 같은 모호한 메시지만 단독으로 쓰지 않는다.
 
+## Codex Worktree Rule
+
+Codex가 저장소에 남는 변경을 수행할 때는 원본 checkout과 분리된 Git worktree를 기본 작업 공간으로 사용한다. IntelliJ에서 사용하는 원본 checkout은 `main` 기준의 사용자 작업 공간으로 유지하며, Codex는 그 checkout의 `main`에서 파일 수정, 브랜치 전환, 커밋, push를 수행하지 않는다. 사용자는 원본 checkout에서 변경을 검토하고 PR을 병합한다.
+
+로컬 작업 예외는 다음처럼 좁게 둔다.
+
+- 원본 checkout에서는 상태 확인, diff 확인, 테스트처럼 파일을 바꾸지 않는 작업만 기본적으로 허용한다.
+- 사용자가 특정 로컬 checkout 또는 기존 worktree에서의 직접 작업을 명시적으로 요청한 경우에만 그 위치를 사용할 수 있다. 이때 대상 경로와 브랜치를 먼저 확인하고, `main`이 아니며 관련 없는 미커밋 변경이 없어야 한다.
+- 새 worktree를 만들 수 없거나 기존 task worktree를 이어받는 경우에도, 작업 위치만 달라질 뿐 기존 Issue, 브랜치, 커밋, PR 규칙은 그대로 적용한다.
+
+하나의 변경 작업은 하나의 Issue, `feature/{issue-number}-{short-kebab-case}` 브랜치, 별도 worktree, PR을 연결한다. worktree는 같은 Issue의 브랜치를 checkout하며, PR 본문의 `Closes #<issue-number>` 규칙을 따른다. worktree 생성은 Issue와 브랜치 규칙을 우회하기 위한 수단이 아니다.
+
+병렬 작업은 서로 다른 Issue, 브랜치, worktree로 나눈다. 같은 branch 또는 같은 worktree를 동시에 사용하지 않으며, 같은 파일을 수정해야 하면 선행 작업의 커밋 또는 PR 상태를 확인한 뒤 순차로 진행한다. 특히 공통 문서와 빌드 설정은 병렬 변경 충돌 가능성이 높으므로 한 작업으로 조정하거나 담당 순서를 합의한다.
+
+작업 시작과 커밋 직전에는 `git status`와 diff로 미커밋 변경을 확인한다. 관련 없는 변경이 있으면 stash, reset, 삭제, 덮어쓰기를 하지 않고 사용자에게 확인을 요청한다. 커밋에는 현재 Issue와 관련된 파일만 명시적으로 stage하며, 다른 작업의 미커밋 변경을 포함하지 않는다.
+
 ## Issue Rule
 
 Jira 같은 별도 이슈 트래커는 사용하지 않고 GitHub Issues로 작업을 관리한다.
