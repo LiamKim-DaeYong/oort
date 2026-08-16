@@ -20,36 +20,60 @@ Oort는 오르트 구름(Oort Cloud)에서 가져온 이름이다.
 
 ## Local Development
 
-로컬 개발은 Windows PowerShell 기준으로 진행한다.
+로컬 개발은 Gradle Wrapper와 Docker Compose를 기준으로 진행한다.
 
-기본 검증:
+필요한 도구는 JDK 21과 Docker Compose를 포함한 Docker Engine이다.
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\check.ps1
+### 기본 검증
+
+macOS/Linux:
+
+```bash
+./gradlew ktlintCheck test build
 ```
 
-로컬 의존성 실행:
+Windows:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\up.ps1
+.\gradlew.bat ktlintCheck test build
 ```
 
-로컬 의존성 종료:
+### 로컬 의존성 실행
+
+PostgreSQL과 mock-server는 Docker Compose로 실행한다. mock-server 이미지를 만들기 전에 JAR를 생성한다.
+
+macOS/Linux:
+
+```bash
+./gradlew :mock-server:bootJar
+docker compose up -d --build postgres mock-server
+```
+
+Windows:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\down.ps1
+.\gradlew.bat :mock-server:bootJar
+docker compose up -d --build postgres mock-server
 ```
 
-현재 `notification` 애플리케이션은 IDE 또는 Gradle로 로컬 JVM에서 실행한다. Docker Compose는 PostgreSQL과 `mock-server`를 실행한다.
+종료:
 
-notification 실행:
+```bash
+docker compose down
+```
+
+### notification 실행
+
+현재 `notification` 애플리케이션은 IDE 또는 Gradle로 로컬 JVM에서 실행한다. Docker Compose는 PostgreSQL과 `mock-server`만 실행한다.
+
+macOS/Linux:
+
+```bash
+./gradlew :notification:bootRun
+```
+
+Windows:
 
 ```powershell
 .\gradlew.bat :notification:bootRun
-```
-
-Walking Skeleton smoke test:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\smoke.ps1
 ```

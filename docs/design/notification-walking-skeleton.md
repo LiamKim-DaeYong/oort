@@ -255,4 +255,4 @@ Walking Skeleton을 만들면서 다음 질문을 확인한다.
 3. notification에서 mock-server를 동기 호출한다.
 4. PostgreSQL에 요청과 결과를 저장한다.
 5. 상태 조회 API를 만든다.
-6. `scripts/smoke.ps1`로 전체 흐름을 확인한다.
+6. 알림 생성과 상태 조회 API로 전체 흐름을 확인한다.
