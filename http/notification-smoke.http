@@ -1,0 +1,72 @@
+### Notification HTTP smoke test
+# Prerequisite:
+# - PostgreSQL and mock-server are running: docker compose up -d postgres mock-server
+# - notification is running locally: .\gradlew.bat :notification:bootRun
+@notificationBaseUrl = http://localhost:8080
+
+### Create a notification successfully
+POST {{notificationBaseUrl}}/api/v1/notifications
+Content-Type: application/json
+
+{
+  "channel": "EMAIL",
+  "recipient": "smoke-test@example.com",
+  "title": "Notification smoke test",
+  "content": "Verify the synchronous dispatch flow."
+}
+
+> {%
+  client.test("creates a dispatched notification", function() {
+    client.assert(response.status === 201, "Expected 201 Created but received " + response.status);
+    client.assert(typeof response.body.id === "string", "Response must contain a notification id");
+    client.assert(response.body.status === "DISPATCHED", "Expected DISPATCHED but received " + response.body.status);
+    client.assert(typeof response.body.completedAt === "string", "Response must contain completedAt");
+  });
+  client.global.set("dispatchedNotificationId", response.body.id);
+%}
+
+### Get the successfully dispatched notification
+GET {{notificationBaseUrl}}/api/v1/notifications/{{dispatchedNotificationId}}
+
+> {%
+  client.test("gets the dispatched notification", function() {
+    client.assert(response.status === 200, "Expected 200 OK but received " + response.status);
+    client.assert(response.body.id === client.global.get("dispatchedNotificationId"), "Response id must match the created notification");
+    client.assert(response.body.status === "DISPATCHED", "Expected DISPATCHED but received " + response.body.status);
+    client.assert(typeof response.body.completedAt === "string", "Response must contain completedAt");
+  });
+%}
+
+### Create a notification when the vendor is unavailable
+# Prerequisite: run `docker compose stop mock-server` before sending this request.
+POST {{notificationBaseUrl}}/api/v1/notifications
+Content-Type: application/json
+
+{
+  "channel": "EMAIL",
+  "recipient": "smoke-test@example.com",
+  "title": "Notification failure smoke test",
+  "content": "Verify the vendor failure flow."
+}
+
+> {%
+  client.test("persists a failed notification", function() {
+    client.assert(response.status === 201, "Expected 201 Created but received " + response.status);
+    client.assert(typeof response.body.id === "string", "Response must contain a notification id");
+    client.assert(response.body.status === "FAILED", "Expected FAILED but received " + response.body.status);
+    client.assert(typeof response.body.completedAt === "string", "Response must contain completedAt");
+  });
+  client.global.set("failedNotificationId", response.body.id);
+%}
+
+### Get the failed notification
+GET {{notificationBaseUrl}}/api/v1/notifications/{{failedNotificationId}}
+
+> {%
+  client.test("gets the failed notification", function() {
+    client.assert(response.status === 200, "Expected 200 OK but received " + response.status);
+    client.assert(response.body.id === client.global.get("failedNotificationId"), "Response id must match the created notification");
+    client.assert(response.body.status === "FAILED", "Expected FAILED but received " + response.body.status);
+    client.assert(typeof response.body.completedAt === "string", "Response must contain completedAt");
+  });
+%}
