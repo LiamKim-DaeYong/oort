@@ -1,4 +1,4 @@
-package io.oort.notification.application
+package io.oort.notification.application.service
 
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
@@ -6,8 +6,12 @@ import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.oort.notification.application.port.input.CreateNotificationCommand
+import io.oort.notification.application.port.output.NotificationDispatch
+import io.oort.notification.application.port.output.NotificationRepository
+import io.oort.notification.application.port.output.NotificationVendorClient
+import io.oort.notification.application.port.output.NotificationVendorException
 import io.oort.notification.domain.NotificationChannel
-import io.oort.notification.domain.NotificationRepository
 import io.oort.notification.domain.NotificationStatus
 import java.time.Clock
 import java.time.Instant
@@ -35,7 +39,16 @@ class NotificationApplicationServiceTest :
 
         describe("creating a notification") {
             it("stores the dispatched result after the vendor accepts it") {
-                every { notificationVendorClient.dispatch(command) } returns Unit
+                every {
+                    notificationVendorClient.dispatch(
+                        NotificationDispatch(
+                            channel = command.channel,
+                            recipient = command.recipient,
+                            title = command.title,
+                            content = command.content,
+                        ),
+                    )
+                } returns Unit
 
                 val result = service.create(command)
 
@@ -45,7 +58,7 @@ class NotificationApplicationServiceTest :
             }
 
             it("stores a failed result when the vendor call fails") {
-                every { notificationVendorClient.dispatch(command) } throws NotificationVendorException(IllegalStateException())
+                every { notificationVendorClient.dispatch(any()) } throws NotificationVendorException(IllegalStateException())
 
                 val result = service.create(command)
 
