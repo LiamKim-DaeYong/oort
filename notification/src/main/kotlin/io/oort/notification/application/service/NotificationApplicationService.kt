@@ -1,9 +1,10 @@
 package io.oort.notification.application.service
 
-import io.oort.notification.application.port.input.CreateNotificationCommand
+import io.oort.notification.application.port.input.NotificationDetail
 import io.oort.notification.application.port.input.NotificationNotFoundException
-import io.oort.notification.application.port.input.NotificationResult
-import io.oort.notification.application.port.input.NotificationUseCase
+import io.oort.notification.application.port.input.create.CreateNotificationCommand
+import io.oort.notification.application.port.input.create.CreateNotificationUseCase
+import io.oort.notification.application.port.input.get.GetNotificationUseCase
 import io.oort.notification.application.port.output.NotificationDispatch
 import io.oort.notification.application.port.output.NotificationRepository
 import io.oort.notification.application.port.output.NotificationVendorClient
@@ -16,8 +17,9 @@ class NotificationApplicationService(
     private val notificationRepository: NotificationRepository,
     private val notificationVendorClient: NotificationVendorClient,
     private val clock: Clock,
-) : NotificationUseCase {
-    override fun create(command: CreateNotificationCommand): NotificationResult {
+) : CreateNotificationUseCase,
+    GetNotificationUseCase {
+    override fun create(command: CreateNotificationCommand): NotificationDetail {
         val notification =
             notificationRepository.save(
                 Notification.accept(
@@ -36,19 +38,19 @@ class NotificationApplicationService(
             notificationVendorClient.dispatch(command.toDispatch())
             notification.markDispatched(clock.instant())
             notificationRepository.save(notification)
-            notification.toResult()
+            notification.toDetail()
         } catch (_: NotificationVendorException) {
             notification.markFailed(clock.instant())
             notificationRepository.save(notification)
-            notification.toResult()
+            notification.toDetail()
         }
     }
 
-    override fun get(notificationId: UUID): NotificationResult =
+    override fun get(notificationId: UUID): NotificationDetail =
         notificationRepository
             .findById(notificationId)
             .orElseThrow { NotificationNotFoundException(notificationId) }
-            .toResult()
+            .toDetail()
 
     private fun CreateNotificationCommand.toDispatch(): NotificationDispatch =
         NotificationDispatch(
@@ -58,8 +60,8 @@ class NotificationApplicationService(
             content = content,
         )
 
-    private fun Notification.toResult(): NotificationResult =
-        NotificationResult(
+    private fun Notification.toDetail(): NotificationDetail =
+        NotificationDetail(
             id = id,
             channel = channel,
             recipient = recipient,
