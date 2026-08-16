@@ -4,6 +4,7 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import java.time.Instant
+import java.util.UUID
 
 class NotificationTest :
     DescribeSpec({
@@ -34,6 +35,7 @@ class NotificationTest :
     companion object {
         private fun notification(requestedAt: Instant): Notification =
             Notification.accept(
+                id = UUID.fromString("0198c83e-0000-7000-8000-000000000001"),
                 channel = NotificationChannel.EMAIL,
                 recipient = "user@example.com",
                 title = "Order completed",

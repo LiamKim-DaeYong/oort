@@ -32,6 +32,7 @@ class Notification(
 
     companion object {
         fun accept(
+            id: UUID,
             channel: NotificationChannel,
             recipient: String,
             title: String,
@@ -39,7 +40,7 @@ class Notification(
             requestedAt: Instant,
         ): Notification =
             Notification(
-                id = UUID.randomUUID(),
+                id = id,
                 channel = channel,
                 recipient = recipient,
                 title = title,

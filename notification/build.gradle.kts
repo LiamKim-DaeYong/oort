@@ -21,6 +21,7 @@ dependencies {
     implementation(libs.spring.boot.starter.webmvc)
     implementation(libs.flyway.database.postgresql)
     implementation(libs.jackson.module.kotlin)
+    implementation(libs.java.uuid.generator)
     implementation(libs.kotlin.reflect)
     implementation(libs.springdoc.openapi.starter.webmvc.ui)
 
