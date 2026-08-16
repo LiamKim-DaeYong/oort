@@ -4,11 +4,13 @@
 
 notification의 식별자는 생성 직후 API 응답과 후속 조회에 사용되고 PostgreSQL의 primary key로 저장된다. 현재는 domain이 UUID v4를 직접 생성한다. UUID v4는 표준적이고 충돌 위험이 낮지만, 무작위 값이라 B-tree primary key에 삽입할 때 locality가 낮다.
 
-PostgreSQL 16을 사용 중이라 native UUID v7 생성 함수는 사용할 수 없다. PostgreSQL 18에는 UUID v7 생성 함수가 추가됐지만, notification은 저장 전부터 ID가 필요하다.
+현재 Compose 기준 PostgreSQL 16을 사용 중이라 native UUID v7 생성 함수는 사용할 수 없다. PostgreSQL 18에는 UUID v7 생성 함수가 추가됐다.
 
 ## Decision
 
 신규 notification ID는 애플리케이션의 `NotificationIdGenerator` output port를 통해 RFC 9562 UUID v7으로 생성한다. 구현은 JUG(`java-uuid-generator`) adapter가 맡고, domain은 생성된 ID를 입력으로 받는다.
+
+PostgreSQL 18의 `uuidv7()`을 사용하더라도 ID 생성 책임을 DB로 옮기지 않는다. 애플리케이션에서 생성하면 DB 버전과 구현에 묶이지 않고, persistence round-trip 전에 ID를 사용할 수 있다. `NotificationIdGenerator` port는 domain/application 테스트에서 생성 ID를 결정적으로 제어한다. 따라서 PostgreSQL 업그레이드만으로 ID 생성 주체를 변경하지 않으며, DB 생성 전환은 별도 성능·운영 근거가 있을 때만 검토한다.
 
 PostgreSQL 컬럼 타입과 HTTP API의 UUID 문자열 계약은 유지한다. 기존 UUID v4 데이터는 유효한 UUID이므로 재작성하지 않고 계속 조회한다. 이 전환은 새 데이터에만 적용하는 forward-only 변경이며 Flyway migration은 필요 없다.
 
@@ -34,7 +36,7 @@ Snowflake는 이번에는 선택하지 않는다. 64-bit 정수 ID와 높은 발
 
 ### Database-generated UUID v7
 
-현재 PostgreSQL 16에서는 지원하지 않는다. 또한 생성 전 ID를 애플리케이션 흐름에서 사용할 수 없게 된다.
+현재 PostgreSQL 16에서는 지원하지 않는다. PostgreSQL 18에서는 사용할 수 있지만, 생성 책임을 DB로 옮기면 DB 버전과 구현에 결합되고 발급된 ID를 사용하려면 persistence round-trip이 필요하다.
 
 ## References
 
