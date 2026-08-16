@@ -1,5 +1,6 @@
 package io.oort.notification.application.port.input
 
+import io.oort.notification.domain.Notification
 import io.oort.notification.domain.NotificationChannel
 import io.oort.notification.domain.NotificationStatus
 import java.time.Instant
@@ -15,3 +16,15 @@ data class NotificationDetail(
     val requestedAt: Instant,
     val completedAt: Instant?,
 )
+
+internal fun Notification.toDetail(): NotificationDetail =
+    NotificationDetail(
+        id = id,
+        channel = channel,
+        recipient = recipient,
+        title = title,
+        content = content,
+        status = status,
+        requestedAt = requestedAt,
+        completedAt = completedAt,
+    )

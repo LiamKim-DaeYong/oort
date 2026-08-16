@@ -1,4 +1,5 @@
 package io.oort.notification.domain
+
 import java.time.Instant
 import java.util.UUID
 
@@ -47,17 +48,4 @@ class Notification(
                 requestedAt = requestedAt,
             )
     }
-}
-
-enum class NotificationChannel {
-    EMAIL,
-    SMS,
-    PUSH,
-}
-
-enum class NotificationStatus {
-    ACCEPTED,
-    DISPATCHING,
-    DISPATCHED,
-    FAILED,
 }
