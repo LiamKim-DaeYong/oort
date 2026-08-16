@@ -1,7 +1,7 @@
 package io.oort.notification.application.service
 
+import io.oort.notification.application.exception.NotificationNotFoundException
 import io.oort.notification.application.port.input.NotificationDetail
-import io.oort.notification.application.port.input.NotificationNotFoundException
 import io.oort.notification.application.port.input.create.CreateNotificationCommand
 import io.oort.notification.application.port.input.create.CreateNotificationUseCase
 import io.oort.notification.application.port.input.get.GetNotificationUseCase
