@@ -1,4 +1,4 @@
-package io.oort.notification.infrastructure
+package io.oort.notification.adapter.output.vendor
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

@@ -1,6 +1,6 @@
-package io.oort.notification.api
+package io.oort.notification.adapter.input.web
 
-import io.oort.notification.application.NotificationNotFoundException
+import io.oort.notification.application.port.input.NotificationNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus

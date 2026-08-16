@@ -1,6 +1,10 @@
 package io.oort.notification.config
 
-import io.oort.notification.infrastructure.NotificationVendorProperties
+import io.oort.notification.adapter.output.vendor.NotificationVendorProperties
+import io.oort.notification.application.port.input.NotificationUseCase
+import io.oort.notification.application.port.output.NotificationRepository
+import io.oort.notification.application.port.output.NotificationVendorClient
+import io.oort.notification.application.service.NotificationApplicationService
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -15,4 +19,11 @@ class NotificationConfiguration {
 
     @Bean
     fun restClientBuilder(): RestClient.Builder = RestClient.builder()
+
+    @Bean
+    fun notificationUseCase(
+        notificationRepository: NotificationRepository,
+        notificationVendorClient: NotificationVendorClient,
+        clock: Clock,
+    ): NotificationUseCase = NotificationApplicationService(notificationRepository, notificationVendorClient, clock)
 }

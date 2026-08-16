@@ -1,8 +1,8 @@
-package io.oort.notification.api
+package io.oort.notification.adapter.input.web
 
-import io.oort.notification.application.CreateNotificationCommand
-import io.oort.notification.application.NotificationApplicationService
-import io.oort.notification.application.NotificationResult
+import io.oort.notification.application.port.input.CreateNotificationCommand
+import io.oort.notification.application.port.input.NotificationResult
+import io.oort.notification.application.port.input.NotificationUseCase
 import io.oort.notification.domain.NotificationChannel
 import io.oort.notification.domain.NotificationStatus
 import jakarta.validation.Valid
@@ -21,13 +21,13 @@ import java.util.UUID
 @RestController
 @RequestMapping("/api/v1/notifications")
 class NotificationController(
-    private val notificationApplicationService: NotificationApplicationService,
+    private val notificationUseCase: NotificationUseCase,
 ) {
     @PostMapping
     fun create(
         @Valid @RequestBody request: CreateNotificationRequest,
     ): ResponseEntity<NotificationResponse> {
-        val notification = notificationApplicationService.create(request.toCommand())
+        val notification = notificationUseCase.create(request.toCommand())
         val location =
             ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -41,7 +41,7 @@ class NotificationController(
     @GetMapping("/{notificationId}")
     fun get(
         @PathVariable notificationId: UUID,
-    ): NotificationResponse = notificationApplicationService.get(notificationId).toResponse()
+    ): NotificationResponse = notificationUseCase.get(notificationId).toResponse()
 }
 
 data class CreateNotificationRequest(

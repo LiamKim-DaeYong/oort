@@ -1,4 +1,4 @@
-package io.oort.notification
+package io.oort
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
