@@ -1,8 +1,9 @@
 package io.oort.notification.adapter.input.web
 
-import io.oort.notification.application.port.input.CreateNotificationCommand
-import io.oort.notification.application.port.input.NotificationResult
-import io.oort.notification.application.port.input.NotificationUseCase
+import io.oort.notification.application.port.input.NotificationDetail
+import io.oort.notification.application.port.input.create.CreateNotificationCommand
+import io.oort.notification.application.port.input.create.CreateNotificationUseCase
+import io.oort.notification.application.port.input.get.GetNotificationUseCase
 import io.oort.notification.domain.NotificationChannel
 import io.oort.notification.domain.NotificationStatus
 import jakarta.validation.Valid
@@ -21,13 +22,14 @@ import java.util.UUID
 @RestController
 @RequestMapping("/api/v1/notifications")
 class NotificationController(
-    private val notificationUseCase: NotificationUseCase,
+    private val createNotificationUseCase: CreateNotificationUseCase,
+    private val getNotificationUseCase: GetNotificationUseCase,
 ) {
     @PostMapping
     fun create(
         @Valid @RequestBody request: CreateNotificationRequest,
     ): ResponseEntity<NotificationResponse> {
-        val notification = notificationUseCase.create(request.toCommand())
+        val notification = createNotificationUseCase.create(request.toCommand())
         val location =
             ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -41,7 +43,7 @@ class NotificationController(
     @GetMapping("/{notificationId}")
     fun get(
         @PathVariable notificationId: UUID,
-    ): NotificationResponse = notificationUseCase.get(notificationId).toResponse()
+    ): NotificationResponse = getNotificationUseCase.get(notificationId).toResponse()
 }
 
 data class CreateNotificationRequest(
@@ -73,7 +75,7 @@ data class NotificationResponse(
     val completedAt: Instant?,
 )
 
-private fun NotificationResult.toResponse(): NotificationResponse =
+private fun NotificationDetail.toResponse(): NotificationResponse =
     NotificationResponse(
         id = id,
         channel = channel,
