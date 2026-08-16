@@ -48,16 +48,3 @@ class Notification(
             )
     }
 }
-
-enum class NotificationChannel {
-    EMAIL,
-    SMS,
-    PUSH,
-}
-
-enum class NotificationStatus {
-    ACCEPTED,
-    DISPATCHING,
-    DISPATCHED,
-    FAILED,
-}
