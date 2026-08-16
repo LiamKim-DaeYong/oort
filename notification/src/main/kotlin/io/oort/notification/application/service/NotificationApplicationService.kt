@@ -5,10 +5,11 @@ import io.oort.notification.application.port.input.NotificationDetail
 import io.oort.notification.application.port.input.create.CreateNotificationCommand
 import io.oort.notification.application.port.input.create.CreateNotificationUseCase
 import io.oort.notification.application.port.input.get.GetNotificationUseCase
-import io.oort.notification.application.port.output.NotificationDispatch
+import io.oort.notification.application.port.input.toDetail
 import io.oort.notification.application.port.output.NotificationRepository
 import io.oort.notification.application.port.output.NotificationVendorClient
 import io.oort.notification.application.port.output.NotificationVendorException
+import io.oort.notification.application.port.output.toDispatch
 import io.oort.notification.domain.Notification
 import java.time.Clock
 import java.util.UUID
@@ -35,7 +36,7 @@ class NotificationApplicationService(
         notificationRepository.save(notification)
 
         return try {
-            notificationVendorClient.dispatch(command.toDispatch())
+            notificationVendorClient.dispatch(notification.toDispatch())
             notification.markDispatched(clock.instant())
             notificationRepository.save(notification)
             notification.toDetail()
@@ -51,24 +52,4 @@ class NotificationApplicationService(
             .findById(notificationId)
             .orElseThrow { NotificationNotFoundException(notificationId) }
             .toDetail()
-
-    private fun CreateNotificationCommand.toDispatch(): NotificationDispatch =
-        NotificationDispatch(
-            channel = channel,
-            recipient = recipient,
-            title = title,
-            content = content,
-        )
-
-    private fun Notification.toDetail(): NotificationDetail =
-        NotificationDetail(
-            id = id,
-            channel = channel,
-            recipient = recipient,
-            title = title,
-            content = content,
-            status = status,
-            requestedAt = requestedAt,
-            completedAt = completedAt,
-        )
 }

@@ -1,4 +1,5 @@
 package io.oort.notification.domain
+
 import java.time.Instant
 import java.util.UUID
 
