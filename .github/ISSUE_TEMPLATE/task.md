@@ -6,8 +6,10 @@ labels: "type:task"
 assignees: "LiamKim-DaeYong"
 ---
 
-## Goal
+## 목표
 
-## Scope
+## 범위
 
-## Notes
+## 완료 조건
+
+## 참고 사항
