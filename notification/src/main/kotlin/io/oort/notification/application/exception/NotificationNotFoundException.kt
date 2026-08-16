@@ -1,4 +1,4 @@
-package io.oort.notification.application.port.input
+package io.oort.notification.application.exception
 
 import java.util.UUID
 
