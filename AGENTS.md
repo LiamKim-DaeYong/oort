@@ -149,14 +149,16 @@ GitHub CLI로 issue나 PR 본문을 작성할 때 긴 Markdown을 `--body` 인�
 - `알림 서비스 만들기`
 - `Kafka 적용`
 
-Issue 본문은 최소한 다음 구조를 사용한다.
+Task Issue 본문은 최소한 다음 구조를 사용한다.
 
 ```md
-## Goal
+## 목표
 
-## Scope
+## 범위
 
-## Notes
+## 완료 조건
+
+## 참고 사항
 ```
 
 초기 label은 최소로 둔다.
@@ -170,6 +172,22 @@ Issue 본문은 최소한 다음 구조를 사용한다.
 - `status:blocked`
 
 모든 Issue에는 `type:*` label을 정확히 하나 붙인다. 특정 실행 서비스에 영향을 주는 작업에만 `service:*` label을 하나 추가한다. 실제로 진행이 막힌 경우에만 `status:blocked`를 추가한다.
+
+라벨은 다음 순서로 선택한다.
+
+1. 작업 성격에 맞는 `type:*` label을 정확히 하나 선택한다.
+2. 실행 서비스의 코드나 설정에 영향을 주는 경우에만 해당 `service:*` label을 하나 추가한다.
+3. 외부 권한, 결정 또는 상태 변화가 없어 진행할 수 없는 경우에만 `status:blocked`를 추가하고, 재개하면 제거한다.
+
+| 분류 | 선택 기준 |
+| --- | --- |
+| `type:task` | 기능, 설정, 일반 구현 작업 |
+| `type:bug` | 기대 동작과 실제 동작의 차이를 수정하는 작업 |
+| `type:experiment` | 가설, 측정 지표, 결과 해석이 있는 실험 작업 |
+| `type:docs` | 실행 동작을 바꾸지 않는 문서·협업 규칙 작업 |
+| `service:notification` | notification 서비스의 코드 또는 실행 설정에 영향을 주는 작업 |
+| `service:mock-server` | mock-server 서비스의 코드 또는 실행 설정에 영향을 주는 작업 |
+| `status:blocked` | 실제 진행이 외부 요인으로 막힌 경우에만 사용 |
 
 `area:*`, priority, 진행 중, 리뷰 대기 같은 label은 현재 사용하지 않는다. 새로운 서비스나 횡단 주제 label은 실제로 필터링·분류할 필요가 반복될 때 별도로 논의한다.
 
