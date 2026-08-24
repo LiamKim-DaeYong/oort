@@ -1,0 +1,54 @@
+name: Contribution Check
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  convention:
+    name: Contribution Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Validate branch, commits, and pull request
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_BRANCH: ${{ github.head_ref }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          set -euo pipefail
+
+          branch_pattern='^feature/([1-9][0-9]*)-[a-z0-9]+(-[a-z0-9]+)*$'
+          if [[ ! "$PR_BRANCH" =~ $branch_pattern ]]; then
+            echo "브랜치는 feature/{issue-number}-{short-kebab-case} 형식이어야 합니다: $PR_BRANCH"
+            exit 1
+          fi
+
+          issue_number="${BASH_REMATCH[1]}"
+          subject_pattern="^(feat|fix|test|docs|refactor|chore|perf|ci)(\\([a-z0-9][a-z0-9-]*\\))?: .+ \(#${issue_number}\)$"
+
+          if [[ ! "$PR_TITLE" =~ $subject_pattern ]]; then
+            echo "PR 제목은 type(scope): 설명 (#${issue_number}) 형식이어야 합니다: $PR_TITLE"
+            exit 1
+          fi
+
+          pr_body="$(jq -r '.pull_request.body // ""' "$GITHUB_EVENT_PATH")"
+          if ! grep -Eqi "(^|[^[:alnum:]_])Closes[[:space:]]+#${issue_number}([^[:digit:]]|$)" <<< "$pr_body"; then
+            echo "PR 본문에 Closes #${issue_number}를 포함해야 합니다."
+            exit 1
+          fi
+
+          while IFS= read -r subject; do
+            if [[ ! "$subject" =~ $subject_pattern ]]; then
+              echo "커밋 메시지는 type(scope): 설명 (#${issue_number}) 형식이어야 합니다: $subject"
+              exit 1
+            fi
+          done < <(git log --format=%s "${BASE_SHA}..${HEAD_SHA}")
