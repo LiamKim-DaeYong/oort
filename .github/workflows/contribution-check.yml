@@ -20,6 +20,7 @@ jobs:
       - name: Validate branch, commits, and pull request
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           PR_BRANCH: ${{ github.head_ref }}
           PR_TITLE: ${{ github.event.pull_request.title }}
         run: |
@@ -50,4 +51,4 @@ jobs:
               echo "커밋 메시지는 type(scope): 설명 (#${issue_number}) 형식이어야 합니다: $subject"
               exit 1
             fi
-          done < <(git log --format=%s "${BASE_SHA}..HEAD")
+          done < <(git log --format=%s "${BASE_SHA}..${HEAD_SHA}")
