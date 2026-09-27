@@ -91,9 +91,11 @@ Spring Boot, Kotlin, 테스트/품질 도구는 도입 시점의 최신 안정 �
 모든 변경 작업은 GitHub Issue를 먼저 만들고 시작한다. Issue 번호는 브랜치, 커밋, PR을 연결하는 작업 식별자다.
 
 - 브랜치는 `feature/{issue-number}-{short-kebab-case}` 형식을 사용한다.
+- 하나의 브랜치는 하나의 작은 Issue를 끝내는 동안만 유지한다. 작업이 커지면 브랜치를 장기화하지 않고 Issue를 분리한다.
 - 커밋 메시지는 Conventional Commits 형식 뒤에 `(#<issue-number>)`을 붙인다.
 - PR 본문에는 반드시 `Closes #<issue-number>`를 넣는다.
 - Issue는 PR을 만들기 전에 닫지 않는다. PR이 main에 merge되어 GitHub가 자동으로 닫게 한다.
+- PR이 merge되면 해당 브랜치와 worktree를 정리한다.
 
 커밋 메시지는 Conventional Commits 형식을 가볍게 따른다.
 
